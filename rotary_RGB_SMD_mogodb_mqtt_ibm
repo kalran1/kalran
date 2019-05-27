@@ -2,8 +2,8 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
-const char* ssid = "iptimewoorijip"; // 와이파이 AP, 또는 스마트폰의 핫스판 이름
-const char* password = "ssw963852741**";  // 와이파이 AP, 또는 스마트폰의 핫스판 이름
+const char* ssid = ""; // 와이파이 AP, 또는 스마트폰의 핫스판 이름
+const char* password = "";  // 와이파이 AP, 또는 스마트폰의 핫스판 이름
 const char* mqtt_server = "broker.mqtt-dashboard.com"; //브로커 주소
 const char* outTopic = "syw1"; // 이름이 중복되지 않게 설정 기록
 const char* inTopic = "syw2"; // 이름이 중복되지 않게 설정 기록
