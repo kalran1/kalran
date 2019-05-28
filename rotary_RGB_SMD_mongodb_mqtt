@@ -5,7 +5,7 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
-const char* ssid = ""; // 와이파이 AP, 또는 스마트폰의 핫스판 이름
+const char* ssid = "i2r"; // 와이파이 AP, 또는 스마트폰의 핫스판 이름
 const char* password = "";  // 와이파이 AP, 또는 스마트폰의 핫스판 이름
 const char* mqtt_server = "broker.mqtt-dashboard.com"; //브로커 주소
 const char* outTopic = "syw1"; // 이름이 중복되지 않게 설정 기록
@@ -17,7 +17,7 @@ char cChipID[20];
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
-char msg[50];
+char msg[255];
 
 //rotary encoder inputs
 int S = D1;     // SW, Switch
@@ -34,7 +34,7 @@ int currentStateCLK;
 int previousStateCLK; 
 
 String encdir ="";
-  
+
 
 //json을 위한 설정
 StaticJsonDocument<200> doc;
@@ -97,14 +97,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-
+  
+  String s;
   deserializeJson(doc,payload);
   root = doc.as<JsonObject>();
 
-  //const char* red = root["r"]; 추가
- 
- 
 }
+
+ 
+ 
+ 
+
 
 // mqtt 통신에 지속적으로 접속한다.
 void reconnect() {
@@ -131,6 +134,11 @@ void reconnect() {
 
 
 void loop(){
+    if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+   
    currentStateCLK = digitalRead(inputCLK);
  
    if (currentStateCLK != previousStateCLK){ 
@@ -140,18 +148,27 @@ void loop(){
        encdir ="CCW";
        digitalWrite(d5,0);   //B
        digitalWrite(d6,255); //R
-       digitalWrite(d7,0);   //G
+       digitalWrite(d7,0);   //G  
+         
+       sprintf(msg,"%d",counter);
+       
      } else {
        counter ++;
        encdir ="CW";
-       digitalWrite(d5,255);   //B
-       digitalWrite(d6,0); //R
+       digitalWrite(d5,255); //B
+       digitalWrite(d6,0);   //R
        digitalWrite(d7,0);   //G
+       
+       sprintf(msg,"%d",counter);
      }
      Serial.print("Direction: ");
      Serial.print(encdir);
      Serial.print(" -- Value: ");
      Serial.println(counter);
+     //
+     Serial.println(msg);
+     client.publish(outTopic, msg);
+     
    } 
    previousStateCLK = currentStateCLK; 
  
@@ -161,6 +178,7 @@ void loop(){
      delay(200);
      counter = 0;
    }
+    
 }
    
   
