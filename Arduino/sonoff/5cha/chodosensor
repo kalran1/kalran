@@ -106,10 +106,10 @@ void loop() {
   if (now - lastMsg > 2000) {
     lastMsg = now;
     ++value;
-    if(analogRead(S)>5)
-    snprintf (msg,"%d",analogRead(S));
+    if(analogRead(S)>800)
+    snprintf (msg,75,"%d",analogRead(S));
     else
-    snprintf (msg,"%d",analogRead(S));
+    snprintf (msg,75,"%d",analogRead(S));
 
     //
     Serial.print("Publish message: ");
