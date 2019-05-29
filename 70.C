@@ -1,8 +1,11 @@
-//프로그램개요: 라인에디터
+
+// 프로그램개요: 여러가지함수를 라인에디터를 이용하여 출력값을 받아오는것입니다.
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h> // pow 함수를 쓰기위해서 선언
+#define prime_max 10000 //미리 준비한 소수의 
 
 /* 한 줄의 최대문자수를 256으로 정의 */
 #define MAXLEN 256
@@ -95,6 +98,10 @@ void Through_s() // a부터 b 까지덧셈
 {
  	int a,b;
  	int i,s;
+	
+	printf("a와b의값을입력하시오.")
+	scanf("%d %d\n", &a,&b)
+	
  	if(a<b){
 		c=a;
 		a=b;
@@ -110,7 +117,28 @@ void Through_s() // a부터 b 까지덧셈
 
 void Prime_f()	// 소인수분해 함수 
 {
-
+	char num[prime_max+1];
+	int primelist [prime_max];
+	int i,j,k; 
+	int m,l; //입력할 두수의 값
+	
+	printf("소인수분해할 수를 입력하세요.");
+	scanf("%d %d", &m,&l);
+	
+	//배열의 초기화
+	for(i = 0; i <= prime_max; i++)
+	   	num[i]= 0;
+	
+	//소수를 구한다
+	k=0;
+	for(i= 2; i<= prime_max; i++){
+		if(num[i]==0){
+			primelist[k] = i;
+			k++;
+			for(j =2*i; j <= prime_max; j += i)
+				num[j] = 1;
+		}
+	}	
 }
 
 
