@@ -150,7 +150,7 @@ void loop(){
        digitalWrite(d6,255); //R
        digitalWrite(d7,0);   //G  
          
-       sprintf(msg,"%d",counter);
+       sprintf(msg,{"ccw"});
        
      } else {
        counter ++;
@@ -159,7 +159,7 @@ void loop(){
        digitalWrite(d6,0);   //R
        digitalWrite(d7,0);   //G
        
-       sprintf(msg,"%d",counter);
+       sprintf(msg,"cw");
      }
      Serial.print("Direction: ");
      Serial.print(encdir);
