@@ -61,8 +61,8 @@ float fO2,fTemp;
 // mqtt를 위한 설정
 const char* mqtt_server = "broker.mqtt-dashboard.com";
 //const char* mqtt_server = "58.72.31.181";
-const char* outTopic = "syw1";
-const char* inTopic = "syw2";
+const char* outTopic = "syw3";
+const char* inTopic = "syw4";
 const char* clientName = ""; // AP 이름과 같이 사용
 int no=1; //기기번호
 
