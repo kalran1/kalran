@@ -16,6 +16,9 @@ const char* mqtt_server = "broker.mqtt-dashboard.com";
 const char* outTopic = "syw1";
 const char* inTopic = "syw2";
 const char* clientName = "";
+String sAP_ssid,sChipID;
+char cAP_ssid[20];
+char cChipID[10]; // Json에서 Mac address를 고유 ID로 사용
     
 int S = A0; // Analog Input
 
@@ -29,6 +32,9 @@ void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   pinMode(S, INPUT);
   Serial.begin(115200);
+  sChipID=String(ESP.getChipId(),HEX);
+  sChipID.toCharArray(cChipID,sChipID.length()+1);
+  Serial.println(sChipID);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
