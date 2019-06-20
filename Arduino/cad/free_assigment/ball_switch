@@ -1,5 +1,3 @@
-// kdi 교수님 깃허브 참조 smd, 로터리, mqtt
-
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
@@ -18,19 +16,13 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[255];
 
-//rotary encoder inputs
-int S = D1;     // SW, Switch
-#define inputDT D2  // DT, OutA
-#define inputCLK D3  // CLK, OutB
+//ball switch inputs
+int d2=D2;  //Digital Input
 
 //rgb smd
 int d5=D5;      //B
 int d6=D6;      //R
 int d7=D7;      //G
-
-int counter = 0; 
-int currentStateCLK;
-int previousStateCLK; 
 
 String encdir ="";
 
@@ -48,9 +40,8 @@ void setup()
    Serial.println("Rotary Encoders");
    setup_wifi();
    delay(1000);
-   pinMode(S, INPUT_PULLUP);
-   pinMode(inputCLK, INPUT);
-   pinMode(inputDT, INPUT);
+   pinMode(d2, INPUT);
+   //pinMode(d4, INPUT);
    pinMode(d5, OUTPUT);
    pinMode(d6, OUTPUT);
    pinMode(d7, OUTPUT);
@@ -64,7 +55,7 @@ void setup()
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 
-  previousStateCLK = digitalRead(inputCLK);
+ 
 }
 
 
@@ -138,46 +129,26 @@ void loop(){
   }
   client.loop();
    
-   currentStateCLK = digitalRead(inputCLK);
- 
-   if (currentStateCLK != previousStateCLK){ 
-       
-     if (digitalRead(inputDT) != currentStateCLK) { 
-       counter --;
-       encdir ="CCW";
-       digitalWrite(d5,0);   //B
-       digitalWrite(d6,255); //R
-       digitalWrite(d7,0);   //G  
-         
-       sprintf(msg,"ccw","%d",counter);
-       
-     } else {
-       counter ++;
-       encdir ="CW";
-       digitalWrite(d5,255); //B
-       digitalWrite(d6,0);   //R
-       digitalWrite(d7,0);   //G
-       
-       sprintf(msg,"cw","%d",counter);
-     }
-     Serial.print("Direction: ");
-     Serial.print(encdir);
-     Serial.print(" -- Value: ");
-     Serial.println(counter);
-     //
+   if(digitalRead(d2)==0)
+    {
+      encdir="safe";
+      digitalWrite(d5,255); //B
+      digitalWrite(d6,0);   //R
+      digitalWrite(d7,0);   //G
+
+      sprintf(msg,"safe %d",d2);
+    }
+    else
+    {
+      encdir="danger";
+      digitalWrite(d5,0);   //B
+      digitalWrite(d6,255); //R
+      digitalWrite(d7,0);   //G
+
+      sprintf(msg,"danger %d",d2);
+    }
+   
+     delay(1000);
      Serial.println(msg);
      client.publish(outTopic, msg);
-     
-   } 
-   previousStateCLK = currentStateCLK; 
- 
-   if (LOW == digitalRead(S))  // 스위치 누르면 counter=0 으로 초기화
-   {
-     Serial.println("Clear"); 
-     delay(200);
-     counter = 0;
-   }
-    
 }
-   
-  
