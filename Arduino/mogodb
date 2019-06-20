@@ -1,0 +1,8 @@
+몽고디비 실행안될때 꿀팁
+
+
+To start a MongoDB service that is in stop mode, please follow those steps
+
+Press window key + R to open Run window.
+Then type "services.msc" to open services window.
+Then select MongoDB server, right click on it, finally click on the start menu entry
